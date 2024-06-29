@@ -1,0 +1,19 @@
+meta {
+  name: createProduct
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/products
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  image_url: @file(C:\Users\Usuario\Downloads\dog-pup.gif)
+  precio: 15
+  cantidad: 2
+  description: chjszaaaaxa,
+  id_category: 1
+}
