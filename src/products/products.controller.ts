@@ -49,7 +49,7 @@ export class ProductsController {
       return await this.productsService.create(createProductDto);
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new BadRequestException('The Description already exists');
+        throw new BadRequestException('The name already exists');
       } else if (error.code === 'P2003') {
         throw new NotFoundException(
           `The id_category ${body.id_category} does not exist`,
@@ -106,7 +106,7 @@ export class ProductsController {
       return await this.productsService.update(id, updateProductDto);
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new BadRequestException('The Description already exists');
+        throw new BadRequestException('The name already exists');
       } else if (error.code === 'P2003') {
         throw new NotFoundException(
           `The id_category ${body.id_category} does not exist`,
