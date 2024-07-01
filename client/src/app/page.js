@@ -20,24 +20,33 @@ const page = () => {
             cantidad={10}
             bgcolor="bg-[#e2f297]"
             textcolor="text-[#445647]"
+            porcentaje="80%"
+            time_start="5h 12min"
+            time_end="5h 24min"
           />
           <StatCard
             title="Servicio"
             cantidad={10}
             bgcolor="bg-[#5aba8a]"
             textcolor="text-white"
+            porcentaje="72%"
+            time_start="3h 12min"
+            time_end="3h 24min"
           />
           <StatCard
             title="Servicio"
             cantidad={10}
             bgcolor="bg-[#01565b]"
             textcolor="text-white"
+            porcentaje="60%"
+            time_start="6h 12min"
+            time_end="6h 24min"
           />
         </div>
         <div className="col-span-5 w-full flex flex-col justify-around items-center ">
           <h2 className="text-xl text-[#1a4545]"> Estadistica Ficticia</h2>
           <ChartDoughnut />
-          <div>aaaaa</div>
+          <div>Scaalbost</div>
         </div>
 
         <div className="col-span-6 p-12 animate-fade-in max-md:p-0 ">

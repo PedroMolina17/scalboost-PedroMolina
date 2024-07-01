@@ -1,6 +1,5 @@
 'use client';
 
-import { createProduct } from '../service/product';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -8,10 +7,10 @@ import {
   getProductById,
   deleteProduct,
   updateProduct,
+  createProduct,
 } from '../service/product';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-
 const formatDate = (isoString) => {
   return format(new Date(isoString), 'MMMM d, yyyy');
 };

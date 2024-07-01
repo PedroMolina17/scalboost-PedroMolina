@@ -3,7 +3,7 @@ import { useParams } from 'next/navigation';
 import SaveButton from '../../../components/SaveButton';
 import CancelButton from '../../../components/CancelButton';
 import { useForm } from 'react-hook-form';
-import { useGetAllCategories } from '../../../hooks/useCategory';
+import { useCategory } from '../../../hooks/useCategory';
 import { useProduct } from '../../../hooks/useProduct';
 import { useEffect } from 'react';
 import { format } from 'date-fns';
@@ -11,6 +11,7 @@ import { format } from 'date-fns';
 const ProductUpdate = () => {
   const { id } = useParams();
   const { updateProductMutation, useGetProductById } = useProduct();
+  const { useGetAllCategories } = useCategory();
 
   const { data: products, isLoading: isLoadingProducts } =
     useGetProductById(id);
@@ -27,7 +28,7 @@ const ProductUpdate = () => {
     defaultValues: {
       name: '',
       description: '',
-      image_url: '',
+      image_url: null,
       cantidad: '',
       precio: '',
       id_category: '',
@@ -43,7 +44,7 @@ const ProductUpdate = () => {
         cantidad: products.cantidad,
         precio: products.precio,
         id_category: products.id_category,
-        image_url: products.image_url,
+        image_url: null,
       });
     }
   }, [products, isLoadingProducts]);
@@ -58,9 +59,10 @@ const ProductUpdate = () => {
     formData.append('cantidad', data.cantidad);
     formData.append('precio', data.precio);
     formData.append('id_category', data.id_category);
-    if (data.image_url[0]) {
+    if (data.image_url && data.image_url[0]) {
       formData.append('image_url', data.image_url[0]);
     }
+
     formData.append('fecha', formattedDate);
     console.log(formattedDate);
 
@@ -222,7 +224,11 @@ const ProductUpdate = () => {
                 </span>
               )}
             </label>
-            <img src={`http://localhost:3000${products.image_url}`}></img>
+            <img
+              src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${products.image_url}`}
+              alt="Imagen del producto"
+              className="w-60"
+            />
           </div>
         </div>
       </form>

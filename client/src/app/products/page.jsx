@@ -11,20 +11,43 @@ import CreateButton from '../components/CreateButton';
 import { useProduct } from '../hooks/useProduct';
 import { CiEdit } from 'react-icons/ci';
 import { GrPrevious, GrNext } from 'react-icons/gr';
-
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { MdDeleteOutline } from 'react-icons/md';
 import Link from 'next/link';
 import { useState } from 'react';
 import SearchInput from '../components/SearchInput';
 import PaginationButton from '../components/PaginationButton';
+import Swal from 'sweetalert2';
+
 const Products = () => {
   const { useGetAllProducts, deleteProductMutation } = useProduct();
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
+  const alertConfirm = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteProduct(id);
+        Swal.fire({
+          title: 'Deleted!',
+          text: 'Your file has been deleted.',
+          icon: 'success',
+        });
+      }
+    });
+  };
+
   const deleteProduct = (id) => {
     deleteProductMutation.mutate(id);
   };
+
   const goToPage = (pageIndex) => {
     setCurrentPageIndex(pageIndex);
     table.setPageIndex(pageIndex);
@@ -34,9 +57,15 @@ const Products = () => {
 
   const columns = [
     {
-      accessorKey: 'id_product',
-      header: 'ID',
-      cell: (info) => info.getValue(),
+      accessorKey: 'image_url',
+      header: 'Imagen',
+      cell: (info) => (
+        <img
+          src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${info.row.original.image_url}`}
+          alt={info.row.original.name}
+          className="h-32 w-32 object-contain"
+        />
+      ),
     },
     {
       accessorKey: 'name',
@@ -101,7 +130,7 @@ const Products = () => {
         <CreateButton href={'products/create'} />
       </div>
 
-      <table className="w-full mt-5 ">
+      <table className="w-full mt-5 text-center">
         <thead className="bg-[#5aba8a] w-full h-14 text-[#1a4545] rounded-tr-md rounded-tl-md ">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -111,17 +140,19 @@ const Products = () => {
                   onClick={header.column.getToggleSortingHandler()}
                 >
                   {header.isPlaceholder ? null : (
-                    <button className="flex gap-2 items-center justify-center w-14">
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                      {
-                        { asc: <FaArrowUp />, desc: <FaArrowDown /> }[
-                          header.column.getIsSorted() ?? null
-                        ]
-                      }
-                    </button>
+                    <div className="">
+                      <button className="">
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                        {
+                          { asc: <FaArrowUp />, desc: <FaArrowDown /> }[
+                            header.column.getIsSorted() ?? null
+                          ]
+                        }
+                      </button>
+                    </div>
                   )}
                 </th>
               ))}
@@ -132,23 +163,22 @@ const Products = () => {
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id} className="h-10">
               {row.getVisibleCells().map((cell, index) => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                <td key={cell.id} className="items-center ">
+                  <div className="flex justify-center">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </div>
                   {index === columns.length - 1 && (
-                    <div className="flex">
+                    <div className="flex gap-2 items-center justify-center">
                       <button
-                        onClick={() => deleteProduct(row.original.id_product)}
-                        // href={`/products/edit/${row.original.id_product}`}
-                        // onClick={() => setOpenForm('delete')}
-                        className="text-red-500 text-2xl focus:outline-none "
+                        onClick={() => alertConfirm(row.original.id_product)}
+                        className="text-white text-2xl focus:outline-none p-2 bg-red-500 rounded-md"
                         aria-label="Eliminar producto"
                       >
                         <MdDeleteOutline className="text-xl" />
                       </button>
                       <Link
                         href={`/products/edit/${row.original.id_product}`}
-                        onClick={() => console.log(row.original.id_product)}
-                        className="text-yellow-500 text-2xl focus:outline-none "
+                        className="text-white text-2xl focus:outline-none p-2  bg-yellow-500 rounded-md"
                         aria-label="Eliminar producto"
                       >
                         <CiEdit className="text-xl" />

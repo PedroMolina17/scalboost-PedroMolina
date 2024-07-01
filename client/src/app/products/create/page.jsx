@@ -2,12 +2,13 @@
 import SaveButton from '../../components/SaveButton';
 import CancelButton from '../../components/CancelButton';
 import { useForm } from 'react-hook-form';
-import { useGetAllCategories } from '../../hooks/useCategory';
+import { useCategory } from '../../hooks/useCategory';
 import { useProduct } from '../../hooks/useProduct';
 
 const Create = () => {
   //Traer funciones del producto
   const { addProductMutation } = useProduct();
+  const { useGetAllCategories } = useCategory();
 
   //Traer datos de la catgoria
   const { data: categories, isLoading: isLoadingCategories } =
