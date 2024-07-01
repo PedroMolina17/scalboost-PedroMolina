@@ -1,9 +1,10 @@
+//Funcion para renombrar si en caso se repiten el nombre crea uno aleatorio
 export const renameImage = (req, file, callback) => {
   const name = file.originalname.split('.')[0];
-  const fileName = file.originalname;
-  const randomName = Array(1)
-    .fill(null)
-    .map(() => Math.random() * 4)
-    .join('');
-  callback(null, `${name}-${randomName}${fileName}`);
+  const ext = file.originalname.split('.').pop();
+  const randomString = Math.random().toString(36).substring(2, 10);
+
+  const newFileName = `${name}-${randomString}.${ext}`;
+
+  callback(null, newFileName);
 };

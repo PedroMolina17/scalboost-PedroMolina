@@ -18,5 +18,5 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], UpdateCategoryDto.prototype, "description", void 0);
+], UpdateCategoryDto.prototype, "name", void 0);
 //# sourceMappingURL=update-category.dto.js.map

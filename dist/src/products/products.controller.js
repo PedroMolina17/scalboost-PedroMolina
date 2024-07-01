@@ -43,7 +43,7 @@ let ProductsController = class ProductsController {
             else if (error.code === 'P2003') {
                 throw new common_1.NotFoundException(`The id_category ${body.id_category} does not exist`);
             }
-            throw error.code;
+            throw error;
         }
     }
     async findAll() {
@@ -63,13 +63,10 @@ let ProductsController = class ProductsController {
     }
     async update(file, id, body) {
         try {
-            if (!file) {
-                throw new common_1.BadRequestException('File is missing');
-            }
-            const filePath = `/images/image-cover/${file.filename}`;
+            const filePath = file ? `/images/image-cover/${file.filename}` : null;
             const updateProductDto = {
                 ...body,
-                image_url: filePath,
+                ...(filePath && { image_url: filePath }),
             };
             return await this.productsService.update(id, updateProductDto);
         }

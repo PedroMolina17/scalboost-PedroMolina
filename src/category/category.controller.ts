@@ -24,7 +24,7 @@ export class CategoryController {
       return await this.categoryService.create(createCategoryDto);
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new BadRequestException('The Description already exists');
+        throw new BadRequestException('The name already exists');
       }
       throw error;
     }
@@ -65,7 +65,7 @@ export class CategoryController {
       if (error.code === 'P2025') {
         throw new NotFoundException(`User with id ${id} not found`);
       } else if (error.code === 'P2002') {
-        throw new NotFoundException(`The Description already exists`);
+        throw new NotFoundException(`The name already exists`);
       }
       throw error;
     }

@@ -6,6 +6,7 @@ export declare class ProductsController {
     constructor(productsService: ProductsService);
     postImageDescription(file: Express.Multer.File, body: CreateProductDto): Promise<{
         id_product: number;
+        name: string;
         description: string;
         image_url: string;
         cantidad: number;
@@ -15,6 +16,7 @@ export declare class ProductsController {
     }>;
     findAll(): Promise<{
         id_product: number;
+        name: string;
         description: string;
         image_url: string;
         cantidad: number;
@@ -24,6 +26,7 @@ export declare class ProductsController {
     }[]>;
     findOne(id: number): Promise<{
         id_product: number;
+        name: string;
         description: string;
         image_url: string;
         cantidad: number;
@@ -33,6 +36,7 @@ export declare class ProductsController {
     }>;
     update(file: Express.Multer.File, id: number, body: UpdateProductDto): Promise<{
         id_product: number;
+        name: string;
         description: string;
         image_url: string;
         cantidad: number;
@@ -42,6 +46,7 @@ export declare class ProductsController {
     }>;
     remove(id: number): Promise<{
         id_product: number;
+        name: string;
         description: string;
         image_url: string;
         cantidad: number;

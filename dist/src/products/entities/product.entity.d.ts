@@ -6,4 +6,5 @@ export declare class Product {
     cantidad: number;
     fecha: Date;
     precio_url: number;
+    id_category: number;
 }

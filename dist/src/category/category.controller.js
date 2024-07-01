@@ -27,7 +27,7 @@ let CategoryController = class CategoryController {
         }
         catch (error) {
             if (error.code === 'P2002') {
-                throw new common_1.BadRequestException('The Description already exists');
+                throw new common_1.BadRequestException('The name already exists');
             }
             throw error;
         }
@@ -61,7 +61,7 @@ let CategoryController = class CategoryController {
                 throw new common_1.NotFoundException(`User with id ${id} not found`);
             }
             else if (error.code === 'P2002') {
-                throw new common_1.NotFoundException(`The Description already exists`);
+                throw new common_1.NotFoundException(`The name already exists`);
             }
             throw error;
         }

@@ -55,7 +55,7 @@ export class ProductsController {
           `The id_category ${body.id_category} does not exist`,
         );
       }
-      throw error.code;
+      throw error;
     }
   }
 
@@ -94,14 +94,10 @@ export class ProductsController {
     @Body() body: UpdateProductDto,
   ) {
     try {
-      if (!file) {
-        throw new BadRequestException('File is missing');
-      }
-
-      const filePath = `/images/image-cover/${file.filename}`;
+      const filePath = file ? `/images/image-cover/${file.filename}` : null;
       const updateProductDto: UpdateProductDto = {
         ...body,
-        image_url: filePath,
+        ...(filePath && { image_url: filePath }),
       };
       return await this.productsService.update(id, updateProductDto);
     } catch (error) {

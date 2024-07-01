@@ -1,15 +1,20 @@
 'use client';
-import SaveButton from '../../components/SaveButton';
-import CancelButton from '../../components/CancelButton';
+import { useParams } from 'next/navigation';
+import SaveButton from '../../../components/SaveButton';
+import CancelButton from '../../../components/CancelButton';
 import { useForm } from 'react-hook-form';
-import { useGetAllCategories } from '../../hooks/useCategory';
-import { useProduct } from '../../hooks/useProduct';
+import { useGetAllCategories } from '../../../hooks/useCategory';
+import { useProduct } from '../../../hooks/useProduct';
+import { useEffect } from 'react';
+import { format } from 'date-fns';
 
-const Create = () => {
-  //Traer funciones del producto
-  const { addProductMutation } = useProduct();
+const ProductUpdate = () => {
+  const { id } = useParams();
+  const { updateProductMutation, useGetProductById } = useProduct();
 
-  //Traer datos de la catgoria
+  const { data: products, isLoading: isLoadingProducts } =
+    useGetProductById(id);
+
   const { data: categories, isLoading: isLoadingCategories } =
     useGetAllCategories();
 
@@ -17,6 +22,7 @@ const Create = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     defaultValues: {
       name: '',
@@ -28,30 +34,51 @@ const Create = () => {
     },
   });
 
+  //Establecemos los datos traidos en el input
+  useEffect(() => {
+    if (!isLoadingProducts && products) {
+      reset({
+        name: products.name,
+        description: products.description,
+        cantidad: products.cantidad,
+        precio: products.precio,
+        id_category: products.id_category,
+        image_url: products.image_url,
+      });
+    }
+  }, [products, isLoadingProducts]);
+
   const onSubmit = async (data) => {
     const formData = new FormData();
+    const currentDate = new Date();
+    const formattedDate = format(currentDate, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
 
     formData.append('name', data.name);
     formData.append('description', data.description);
     formData.append('cantidad', data.cantidad);
     formData.append('precio', data.precio);
     formData.append('id_category', data.id_category);
-
-    if (data.image_url) {
+    if (data.image_url[0]) {
       formData.append('image_url', data.image_url[0]);
     }
-    addProductMutation.mutate(formData);
+    formData.append('fecha', formattedDate);
+    console.log(formattedDate);
+
+    updateProductMutation.mutate({ id, data: formData });
+    console.log({ id, data: formData });
   };
 
-  return (
+  return isLoadingProducts ? (
+    <div>Loading...</div>
+  ) : (
     <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         method="post"
         className=" text-[#1a4545]"
       >
-        <div className="flex justify-between">
-          <h2 className="text-2xl ">Crear Producto</h2>
+        <div className="flex justify-between ">
+          <h2 className="text-2xl ">Actualizar Producto</h2>
           <div className="flex gap-4">
             <CancelButton href={'/products'} />
             <SaveButton />
@@ -165,7 +192,6 @@ const Create = () => {
                     required: 'Selecciona una categoría',
                   })}
                 >
-                  <option value="">Selecciona una categoría</option>
                   {categories &&
                     categories.map((category) => (
                       <option
@@ -188,12 +214,7 @@ const Create = () => {
               <input
                 type="file"
                 accept=".jpg, .jpeg, .png, .gif"
-                {...register('image_url', {
-                  required: {
-                    value: true,
-                    message: 'Imagen es requerido',
-                  },
-                })}
+                {...register('image_url')}
               />
               {errors.image_url && (
                 <span className="text-sm text-red-500">
@@ -201,6 +222,7 @@ const Create = () => {
                 </span>
               )}
             </label>
+            <img src={`http://localhost:3000${products.image_url}`}></img>
           </div>
         </div>
       </form>
@@ -208,4 +230,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default ProductUpdate;

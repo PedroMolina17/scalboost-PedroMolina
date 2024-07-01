@@ -20,7 +20,7 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             serve_static_1.ServeStaticModule.forRoot({
-                rootPath: (0, path_1.join)(__dirname, '..', 'public'),
+                rootPath: (0, path_1.join)(__dirname, '..', '..', 'public'),
             }),
             category_module_1.CategoryModule,
             prisma_module_1.PrismaModule,

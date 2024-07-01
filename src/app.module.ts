@@ -7,7 +7,7 @@ import { ProductsModule } from './products/products.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', '..', 'public'),
     }),
     CategoryModule,
     PrismaModule,
